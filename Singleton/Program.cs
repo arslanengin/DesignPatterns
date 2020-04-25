@@ -14,7 +14,7 @@ namespace Singleton
     {
         private CustomerManager()
         {
-
+            Console.WriteLine( "");
         }
 
 
