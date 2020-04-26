@@ -1,17 +1,26 @@
 ﻿using System;
+using Ninject;
 
-namespace DependencyInjectionWithoutSOLID
+namespace DependencyInjection
 {
     class Program
     {
         static void Main(string[] args)
         {
-            ProductManager productManager = new ProductManager();
+            IKernel kernel = new StandardKernel();
+
+            kernel.Bind<IProductDal>().To<EFProductDal>().InSingletonScope();
+
+            ProductManager productManager = new ProductManager(kernel.Get<IProductDal>());
+
             productManager.Save();
         }
     }
-
-    class EFProductDal
+    interface IProductDal
+    {
+        void Save();
+    }
+    class EFProductDal : IProductDal
     {
         public void Save()
         {
@@ -19,15 +28,28 @@ namespace DependencyInjectionWithoutSOLID
         }
     }
 
+    class NhProductDal : IProductDal
+    {
+        public void Save()
+        {
+            Console.WriteLine("Saved with Nh");
+        }
+    }
+
     class ProductManager
     {
+        private IProductDal _productDal;
+
+        public ProductManager(IProductDal productDal)
+        {
+            _productDal = productDal;
+        }
         public void Save()
         {
 
             //Business Code
-            EFProductDal productDal = new EFProductDal();
-            productDal.Save();
+
+            _productDal.Save();
         }
     }
-
 }
