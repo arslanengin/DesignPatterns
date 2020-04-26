@@ -12,7 +12,7 @@ namespace DependencyInjectıon
 
             ProductManager productManager = new ProductManager(kernel.Get<IProductDal>());
 
-            productManager.Save();
+            productManager.Save(); 
         }
     }
     interface IProductDal
